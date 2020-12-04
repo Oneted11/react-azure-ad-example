@@ -3,7 +3,7 @@ import { MsalAuthProvider, LoginType } from "react-aad-msal";
 //env variables
 // const { TENANT_ID, SECRET, APP_ID } = process.env
 const TENANT_ID = "f4468adf-2fb0-4f3f-aceb-0500f3a9de15";
-const SECRET = ".m8c3.~Ml2VRnlRzV_vKTI7vp13NClqBQK";
+
 const APP_ID = "6d4a0ad7-6519-4ff7-a1b6-8bfbb20b83bb";
 // Msal Configurations
 export const config = {
