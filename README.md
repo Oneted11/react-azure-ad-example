@@ -1,3 +1,14 @@
+# NOTES
+
+for this to work enable ID tokens on your azure registered app
+add the url of your app "http://localhost:3000" or similar wil work as well
+You'll need to go to authentication>add platform to get these settings
+you may refer to 
+
+https://stackoverflow.com/questions/53635579/aadsts700054-response-type-id-token-is-not-enabled-for-the-application/53635651
+
+as well as https://stackoverflow.com/questions/50011686/aadsts50011-the-reply-url-specified-in-the-request-does-not-match-the-reply-url for these issues
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
