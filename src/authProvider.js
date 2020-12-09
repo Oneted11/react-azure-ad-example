@@ -29,7 +29,7 @@ export const authenticationParametersGraph = {
 // Options
 export const options = {
   loginType: LoginType.Redirect,
-  tokenRefreshUri: window.location.origin,
+  tokenRefreshUri: window.location.origin + "/main",
 };
 export const authProvider = new MsalAuthProvider(
   config,
