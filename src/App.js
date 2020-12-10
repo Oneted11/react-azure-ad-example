@@ -1,4 +1,141 @@
-const App = () => {
-  return <h1>Hello World</h1>;
-};
+import React, { useEffect, useState } from "react";
+
+import "./App.css";
+import { UserAgentApplication } from "msal";
+import { getUserDetails } from "./GraphService.js";
+import config from "./Config.js";
+
+function App() {
+  const userAgentApplication = new UserAgentApplication({
+    auth: {
+      clientId: config.appId,
+      redirectUri: config.redirectUri,
+    },
+    cache: {
+      cacheLocation: "localStorage",
+      storeAuthStateInCookie: true,
+    },
+  });
+
+  const [loginState, setLoginState] = useState({
+    isAuthenticated: false,
+    user: {},
+    error: null,
+  });
+
+  useEffect(() => {
+    let user = userAgentApplication.getAccount();
+    console.log(user);
+    if (user) {
+      // Enhance user object with data from Graph
+      getUserProfile();
+    }
+  }, []);
+
+  const login = async () => {
+    try {
+      await userAgentApplication.loginPopup({
+        scopes: config.scopes,
+        prompt: "select_account",
+      });
+      await getUserProfile();
+    } catch (err) {
+      var error = {};
+
+      if (typeof err === "string") {
+        var errParts = err.split("|");
+        error =
+          errParts.length > 1
+            ? { message: errParts[1], debug: errParts[0] }
+            : { message: err };
+      } else {
+        error = {
+          message: err.message,
+          debug: JSON.stringify(err),
+        };
+      }
+
+      setLoginState({
+        isAuthenticated: false,
+        user: {},
+        error: error,
+      });
+    }
+  };
+
+  const logout = () => {
+    userAgentApplication.logout();
+  };
+
+  const getUserProfile = async () => {
+    try {
+      // Get the access token silently
+      // If the cache contains a non-expired token, this function
+      // will just return the cached token. Otherwise, it will
+      // make a request to the Azure OAuth endpoint to get a token
+
+      var accessToken = await userAgentApplication.acquireTokenSilent({
+        scopes: config.scopes,
+      });
+
+      if (accessToken) {
+        // Get the user's profile from Graph
+        var user = await getUserDetails(accessToken);
+        setLoginState({
+          isAuthenticated: true,
+          user: {
+            displayName: user.displayName,
+            email: user.mail || user.userPrincipalName,
+            givenName: user.givenName,
+            surname: user.surname,
+          },
+          error: null,
+        });
+      }
+    } catch (err) {
+      var error = {};
+      if (typeof err === "string") {
+        var errParts = err.split("|");
+        error =
+          errParts.length > 1
+            ? { message: errParts[1], debug: errParts[0] }
+            : { message: err };
+      } else {
+        error = {
+          message: err.message,
+          debug: JSON.stringify(err),
+        };
+      }
+
+      setLoginState({
+        isAuthenticated: false,
+        user: {},
+        error: error,
+      });
+    }
+  };
+
+  return (
+    <div>
+      <p>Display name: {loginState.user.displayName}</p>
+      <p>Username: {loginState.user.userName}</p>
+      <p>First name: {loginState.user.givenName}</p>
+      <p>Last name: {loginState.user.surname}</p>
+      {loginState.error ? <p>loginState.error</p> : null}
+      {loginState.isAuthenticated ? (
+        <div>
+          <h4>Welcome {loginState.user.displayName}!</h4>
+          <button color="primary" onClick={logout}>
+            Logout
+          </button>
+        </div>
+      ) : (
+        <button color="primary" onClick={login}>
+          Click here to sign in
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default App;
