@@ -86,24 +86,12 @@ function App() {
         });
       }
     } catch (err) {
-      var error = {};
-      if (typeof err === "string") {
-        var errParts = err.split("|");
-        error =
-          errParts.length > 1
-            ? { message: errParts[1], debug: errParts[0] }
-            : { message: err };
-      } else {
-        error = {
-          message: err.message,
-          debug: JSON.stringify(err),
-        };
-      }
+      console.dir(err, { depth: null });
 
       setLoginState({
         isAuthenticated: false,
         user: {},
-        error: error,
+        error: err,
       });
     }
   };
