@@ -1,9 +1,9 @@
 # NOTES
 
-for this to work enable ID tokens on your azure registered app
-add the url of your app "http://localhost:3000" or similar wil work as well
+For this to work enable `ID tokens` & `Access tokens` on your azure registered app
+add the url of your app "http://localhost:3000" or similar will work as well
 You'll need to go to authentication>add platform to get these settings
-you may refer to 
+you may refer to
 
 https://stackoverflow.com/questions/53635579/aadsts700054-response-type-id-token-is-not-enabled-for-the-application/53635651
 
