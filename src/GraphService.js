@@ -17,6 +17,6 @@ export async function getUserDetails(accessToken) {
   const client = getAuthenticatedClient(accessToken);
 
   const user = await client.api("/me").get();
-  console.log("got user info from graph");
+  // console.log("got user info from graph");
   return user;
 }

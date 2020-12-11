@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     let user = userAgentApplication.getAccount();
-    console.log("user within useEffect => ", user);
+    // console.log("user within useEffect => ", user);
     if (user) {
       // Enhance user object with data from Graph
       getUserProfile();
@@ -32,9 +32,9 @@ function App() {
   }, []);
 
   // useeffect for diplaying state changes
-  useEffect(() => {
-    console.dir(loginState, { depth: null });
-  }, [loginState]);
+  // useEffect(() => {
+  //   console.dir(loginState, { depth: null });
+  // }, [loginState]);
 
   const login = async () => {
     try {
