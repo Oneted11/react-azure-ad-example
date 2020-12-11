@@ -21,7 +21,7 @@ export const config = {
 };
 // Authentication Parameters
 export const authenticationParameters = {
-  scopes: [`${APP_ID}`],
+  scopes: ["user.read"],
 };
 export const authenticationParametersGraph = {
   scopes: ["openid"],

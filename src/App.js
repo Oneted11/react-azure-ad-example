@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import "./App.css";
 import { UserAgentApplication } from "msal";
-import { getUserDetails } from "./GraphService.js";
-import config from "./Config.js";
+import { getUserDetails } from "./GraphService";
+import config from "./Config";
 
 function App() {
   const userAgentApplication = new UserAgentApplication({
@@ -25,12 +25,17 @@ function App() {
 
   useEffect(() => {
     let user = userAgentApplication.getAccount();
-    console.log(user);
+    console.log("user within useEffect => ", user);
     if (user) {
       // Enhance user object with data from Graph
       getUserProfile();
     }
   }, []);
+
+  // useeffect for diplaying state changes
+  useEffect(() => {
+    console.dir(loginState, { depth: null });
+  }, [loginState]);
 
   const login = async () => {
     try {
@@ -40,25 +45,13 @@ function App() {
       });
       await getUserProfile();
     } catch (err) {
-      var error = {};
-
-      if (typeof err === "string") {
-        var errParts = err.split("|");
-        error =
-          errParts.length > 1
-            ? { message: errParts[1], debug: errParts[0] }
-            : { message: err };
-      } else {
-        error = {
-          message: err.message,
-          debug: JSON.stringify(err),
-        };
-      }
+      // log the error object
+      console.dir(err, { depth: null });
 
       setLoginState({
         isAuthenticated: false,
         user: {},
-        error: error,
+        error: err,
       });
     }
   };
@@ -74,7 +67,7 @@ function App() {
       // will just return the cached token. Otherwise, it will
       // make a request to the Azure OAuth endpoint to get a token
 
-      var accessToken = await userAgentApplication.acquireTokenSilent({
+      let accessToken = await userAgentApplication.acquireTokenSilent({
         scopes: config.scopes,
       });
 
@@ -118,7 +111,7 @@ function App() {
   return (
     <div>
       <p>Display name: {loginState.user.displayName}</p>
-      <p>Username: {loginState.user.userName}</p>
+      <p>Mail: {loginState.user.email}</p>
       <p>First name: {loginState.user.givenName}</p>
       <p>Last name: {loginState.user.surname}</p>
       {loginState.error ? <p>loginState.error</p> : null}
