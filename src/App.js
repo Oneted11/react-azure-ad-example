@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import "./App.css";
 import { UserAgentApplication } from "msal";
 import { getUserDetails } from "./GraphService";
 import config from "./Config";
